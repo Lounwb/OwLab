@@ -46,13 +46,15 @@ dev = [
     "mypy>=1.5.0",
     "types-requests>=2.31.0",
     "types-pyyaml>=6.0.0",
+    "twine>=5.0.0",
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/owlab"
-Documentation = "https://github.com/yourusername/owlab/docs"
-Repository = "https://github.com/yourusername/owlab"
-Issues = "https://github.com/yourusername/owlab/issues"
+Homepage = "https://github.com/Lounwb/OwLab"
+Documentation = "https://github.com/Lounwb/OwLab#readme"
+Repository = "https://github.com/Lounwb/OwLab"
+Issues = "https://github.com/Lounwb/OwLab/issues"
+"PyPI" = "https://pypi.org/project/owlab/"
 
 [tool.hatch.build.targets.wheel]
 packages = ["owlab"]

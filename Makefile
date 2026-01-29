@@ -1,4 +1,4 @@
-.PHONY: help install install-dev test lint format type-check clean build
+.PHONY: help install install-dev test lint format type-check clean build publish
 
 help:
 	@echo "Available commands:"
@@ -10,6 +10,7 @@ help:
 	@echo "  make type-check   - Run type checking"
 	@echo "  make clean        - Clean build artifacts"
 	@echo "  make build        - Build package"
+	@echo "  make publish      - Build and upload to PyPI (requires TWINE_USERNAME/TWINE_PASSWORD)"
 
 install:
 	uv pip install -e .
@@ -41,3 +42,6 @@ clean:
 
 build:
 	uv build
+
+publish: clean build
+	uv run --with twine twine upload dist/*

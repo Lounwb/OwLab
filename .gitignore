@@ -140,3 +140,5 @@ logs/
 owlab_config.json
 .owlab/
 swanlog/
+
+docs/*

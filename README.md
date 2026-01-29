@@ -13,6 +13,8 @@
 </p>
 
 <p align="center">
+  <a href="https://pypi.org/project/owlab/"><img src="https://img.shields.io/pypi/v/owlab?color=blue" alt="PyPI"/></a>
+  <a href="https://pypi.org/project/owlab/"><img src="https://img.shields.io/pypi/dm/owlab" alt="PyPI - Downloads"/></a>
   <a href="https://github.com/Lounwb/OwLab/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"/></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.9+-green.svg" alt="Python 3.9+"/></a>
 </p>
@@ -21,16 +23,18 @@
 
 ## ✨ Features
 
-| | Feature |
+| | |
 |---|--------|
-| 📈 | **Experiment tracking** — Log metrics and visualize runs with [SwanLab](https://swanlab.cn/) |
-| 📊 | **Lark / Feishu** — Auto-write results to Feishu spreadsheets and send start/end notifications via webhook |
-| 💾 | **Local storage** — Logs, `results.csv`, `results.json`, and a `model/` folder under `./output/<type>/<experiment_name>_<timestamp>/` |
-| 🔧 | **Simple API** — `init()` → `log()` → `finish()`; works with or without config for local-only runs |
+| 📈 | **Experiment tracking** — Metrics and runs with [SwanLab](https://swanlab.cn/) |
+| 📊 | **Experiment data management** — Results in Feishu spreadsheets |
+| 📢 | **Message notifications** — Start/end alerts via Lark webhook |
+| 💾 | **Multi-backend backup** — Local output + Lark; logs, results, and models saved |
 
 ---
 
 ## 🚀 Quick Start
+
+Install from [PyPI](https://pypi.org/project/owlab/):
 
 ```bash
 pip install owlab
@@ -57,7 +61,7 @@ Without any config, OwLab runs in local-only mode: results go to `./output/` and
 
 | Method | Command |
 |--------|--------|
-| **pip** | `pip install owlab` |
+| **PyPI (recommended)** | `pip install owlab` — [Download on PyPI](https://pypi.org/project/owlab/) |
 | **uv** | `uv pip install owlab` |
 | **From source** | `git clone https://github.com/Lounwb/OwLab.git && cd OwLab && pip install -e .` |
 
@@ -158,6 +162,7 @@ owlab.finish(results=[
 
 ## 📄 License & Links
 
+- **PyPI:** [pypi.org/project/owlab](https://pypi.org/project/owlab/)
 - **License:** [MIT](LICENSE)
 - **Repository:** [github.com/Lounwb/OwLab](https://github.com/Lounwb/OwLab)
 - **Issues:** [github.com/Lounwb/OwLab/issues](https://github.com/Lounwb/OwLab/issues)

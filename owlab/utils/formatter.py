@@ -106,7 +106,7 @@ class ExperimentDataFormatter:
             List of rows, each row is [method, measure, dataset1_metrics..., dataset2_metrics..., ...]
         """
         rows = []
-        grouped_by_method = {}
+        grouped_by_method: dict[str, Any] = {}
 
         # Group data by method for the target measure
         for method_data in experiment_data:
@@ -179,7 +179,7 @@ class ExperimentDataFormatter:
 
             # Add average if available
             if include_average:
-                avg_data = next(
+                avg_data: dict[str, Any] = next(
                     (
                         d.get("Average", {})
                         for d in experiment_data

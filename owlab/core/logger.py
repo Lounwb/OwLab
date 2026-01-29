@@ -2,7 +2,7 @@
 
 from pathlib import Path
 import sys
-from typing import Optional
+from typing import Any, Optional
 
 from loguru import logger
 
@@ -27,7 +27,7 @@ def get_logger(
     level: str = "INFO",
     log_file: Optional[str] = None,
     format_string: Optional[str] = None,
-) -> "logger":
+) -> Any:
     """Get a configured logger instance.
 
     Configures the global loguru logger only on first call, so that

@@ -56,7 +56,7 @@ class LarkSheetManager:
                     data.get("data", {}).get("spreadsheet", {}).get("spreadsheet_token")
                 )
                 logger.info(f"Created spreadsheet: {title}")
-                return spreadsheet_token
+                return spreadsheet_token  # type: ignore[no-any-return]
             else:
                 logger.error(f"Error creating spreadsheet: {data.get('msg')}")
                 return None
@@ -131,7 +131,7 @@ class LarkSheetManager:
                     .get("sheetId")
                 )
                 logger.info(f"Added sheet: {title}")
-                return sheet_id
+                return sheet_id  # type: ignore[no-any-return]
             else:
                 logger.error(f"Error adding sheet: {data.get('msg')}")
                 return None

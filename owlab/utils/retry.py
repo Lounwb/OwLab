@@ -45,7 +45,7 @@ def retry(
     def decorator(func: Callable) -> Callable:
         @wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
-            last_exception = None
+            last_exception: Optional[Exception] = None
             current_delay = delay
 
             for attempt in range(1, max_attempts + 1):
@@ -107,7 +107,7 @@ def retry_on_http_error(
         def wrapper(*args: Any, **kwargs: Any) -> Any:
             import requests
 
-            last_exception = None
+            last_exception: Optional[Exception] = None
             current_delay = delay
 
             for attempt in range(1, max_attempts + 1):

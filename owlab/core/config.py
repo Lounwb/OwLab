@@ -67,8 +67,8 @@ class Config(BaseModel):
 
     lark: Optional[LarkConfig] = Field(None, description="Lark configuration")
     swanlab: Optional[SwanLabConfig] = Field(None, description="SwanLab configuration")
-    storage: StorageConfig = Field(default_factory=StorageConfig, description="Storage config")
-    logging: LoggingConfig = Field(default_factory=LoggingConfig, description="Logging config")
+    storage: StorageConfig = Field(default_factory=StorageConfig, description="Storage config")  # type: ignore[arg-type]
+    logging: LoggingConfig = Field(default_factory=LoggingConfig, description="Logging config")  # type: ignore[arg-type]
     experiment: Optional[ExperimentConfig] = Field(None, description="Experiment configuration")
 
     @classmethod
@@ -136,7 +136,7 @@ class Config(BaseModel):
         Returns:
             Dictionary of configuration values
         """
-        config = {}
+        config: dict[str, Any] = {}
         prefix_len = len(prefix)
 
         for key, value in os.environ.items():

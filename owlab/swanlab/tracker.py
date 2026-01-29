@@ -119,12 +119,12 @@ class SwanLabTracker:
             # SwanLab automatically finishes when the process ends
             # We can get the URL from the run object if available
             if hasattr(self._run, "url"):
-                url = self._run.url
+                url = self._run.url  # type: ignore[attr-defined]
             else:
                 # Try to get URL from swanlab settings
                 url = getattr(self.swanlab, "settings", {}).get("url", "")
             logger.info(f"SwanLab run finished. URL: {url}")
-            return url
+            return url  # type: ignore[no-any-return]
         except Exception as e:
             logger.error(f"Failed to finish SwanLab run: {e}")
             return ""
@@ -141,15 +141,15 @@ class SwanLabTracker:
         # Try multiple ways to get URL
         try:
             # Method 1: From run object
-            if hasattr(self._run, "url") and self._run.url:
-                self.url = self._run.url
+            if hasattr(self._run, "url") and self._run.url:  # type: ignore[attr-defined]
+                self.url = self._run.url  # type: ignore[attr-defined]
                 return self.url
 
             # Method 2: From swanlab.get_url()
             url = self.swanlab.get_url()
             if url:
                 self.url = url
-                return url
+                return url  # type: ignore[no-any-return]
 
             # Method 3: From swanlab settings
             settings = getattr(self.swanlab, "settings", {})
@@ -157,7 +157,7 @@ class SwanLabTracker:
                 url = settings.get("url", "")
                 if url:
                     self.url = url
-                    return url
+                    return url  # type: ignore[no-any-return]
         except Exception as e:
             logger.debug(f"Failed to get SwanLab URL: {e}")
 

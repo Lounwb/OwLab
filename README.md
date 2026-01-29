@@ -1,42 +1,76 @@
-# OwLab
+<p align="center">
+  <img src="./assets/logo.png" width="512" height="256" alt="OwLab logo"/>
+</p>
 
-OwLab 是一个基于 SwanLab 和飞书的 Python 工具库，用于机器学习实验的全生命周期管理，包括实验配置、追踪、管理以及消息通知和实验数据管理。
+<h1 align="center">OwLab</h1>
 
-## 功能特性
+<p align="center">
+  <strong>ML experiments, tracked & notified.</strong>
+</p>
 
-- 🚀 **实验追踪**: 基于 SwanLab 的实验追踪和可视化
-- 📊 **数据管理**: 飞书表格自动写入和管理实验结果
-- 📢 **消息通知**: 飞书机器人自动发送实验开始和结束通知
-- 💾 **本地存储**: 本地日志和 CSV 数据存储
-- 🔧 **易于使用**: 简洁的 API，与 SwanLab 使用体验一致
+<p align="center">
+  A Python toolkit for the full lifecycle of machine learning experiments — experiment tracking with <a href="https://swanlab.cn/">SwanLab</a>, notifications & data management with <a href="https://open.feishu.cn/">Lark (Feishu)</a>, and local storage.
+</p>
 
-## 安装
+<p align="center">
+  <a href="https://github.com/Lounwb/OwLab/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"/></a>
+  <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.9+-green.svg" alt="Python 3.9+"/></a>
+</p>
 
-### 使用 uv (推荐)
+---
 
-```bash
-uv pip install owlab
-```
+## ✨ Features
 
-### 使用 pip
+| | Feature |
+|---|--------|
+| 📈 | **Experiment tracking** — Log metrics and visualize runs with [SwanLab](https://swanlab.cn/) |
+| 📊 | **Lark / Feishu** — Auto-write results to Feishu spreadsheets and send start/end notifications via webhook |
+| 💾 | **Local storage** — Logs, `results.csv`, `results.json`, and a `model/` folder under `./output/<type>/<experiment_name>_<timestamp>/` |
+| 🔧 | **Simple API** — `init()` → `log()` → `finish()`; works with or without config for local-only runs |
+
+---
+
+## 🚀 Quick Start
 
 ```bash
 pip install owlab
+# or: uv pip install owlab
 ```
 
-### 从源码安装
+```python
+from owlab import OwLab
 
-```bash
-git clone https://github.com/yourusername/owlab.git
-cd owlab
-uv pip install -e .
+owlab = OwLab()
+owlab.init(project="my_project", experiment_name="run_1", config={"lr": 0.01, "epochs": 10})
+
+for step in range(10):
+    owlab.log({"loss": 1.0 - step * 0.1, "acc": step * 0.1}, step=step)
+
+owlab.finish(results=[{"method": "baseline", "dataset1": {"measure": "MCM", "accuracy": 0.95}}])
 ```
 
-## 快速开始
+Without any config, OwLab runs in local-only mode: results go to `./output/` and no Lark/SwanLab calls are made.
 
-### 1. 配置
+---
 
-创建配置文件 `~/.owlab/config.json` 或 `./owlab_config.json`:
+## 📦 Installation
+
+| Method | Command |
+|--------|--------|
+| **pip** | `pip install owlab` |
+| **uv** | `uv pip install owlab` |
+| **From source** | `git clone https://github.com/Lounwb/OwLab.git && cd OwLab && pip install -e .` |
+
+---
+
+## ⚙️ Configuration
+
+To enable **Lark (Feishu)** and **SwanLab**, put your credentials in one of:
+
+- **File:** `~/.owlab/config.json` or `./.owlab/config.json`
+- **Environment:** `OWLAB_LARK__WEBHOOK__WEBHOOK_URL`, `OWLAB_LARK__API__APP_ID`, etc.
+
+Example config file (use `.owlab/config.json.example` as a template):
 
 ```json
 {
@@ -52,7 +86,7 @@ uv pip install -e .
     }
   },
   "swanlab": {
-    "api_key": "your_api_key"
+    "api_key": "your_swanlab_api_key"
   },
   "storage": {
     "local_path": "./output"
@@ -60,145 +94,81 @@ uv pip install -e .
 }
 ```
 
-或者使用环境变量:
+Environment variables follow the pattern `OWLAB_<SECTION>__<KEY>__<SUBKEY>` (e.g. `OWLAB_LARK__WEBHOOK__WEBHOOK_URL`).
 
-```bash
-export OWLAB_LARK__WEBHOOK__WEBHOOK_URL="https://..."
-export OWLAB_LARK__WEBHOOK__SIGNATURE="your_signature"
-export OWLAB_LARK__API__APP_ID="your_app_id"
-export OWLAB_LARK__API__APP_SECRET="your_app_secret"
-export OWLAB_LARK__API__ROOT_FOLDER_TOKEN="your_root_folder_token"
-export OWLAB_SWANLAB__API_KEY="your_api_key"
-```
+---
 
-### 2. 基本使用
+## 📖 Usage
+
+### 1. Initialize
 
 ```python
 from owlab import OwLab
 
-# 初始化 OwLab
 owlab = OwLab()
-
-# 开始实验
 owlab.init(
-    project="my_project",  # 项目名称（必选）
-    experiment_name="my_experiment",  # 实验名称（可选，默认为项目名称）
-    description="This is a test experiment",
-    tags=["baseline"],  # 标签（可选，用于分类：baseline/debug/ablation等）
+    project="my_project",           # Required
+    experiment_name="exp_001",      # Optional; defaults to project
+    description="Short description",
+    type="baseline",                # e.g. baseline / debug / ablation — used for folder naming
+    version="1.0",                 # Experiment version
+    tags=["baseline"],             # Optional tags
     config={
-        "learning_rate": 0.01,
-        "batch_size": 32,
-        "epochs": 100
-    }
+        "methods": [...],          # Method definitions for result tables
+        "datasets": [...],
+        "metrics": [...],
+        "measures": [...],
+        "experiment_params": {"learning_rate": 0.01, "batch_size": 32},
+        "seed": 42,
+    },
 )
+```
 
-# 记录指标
+### 2. Log metrics during training
+
+```python
 for epoch in range(100):
-    metrics = {
-        "loss": 0.5 - epoch * 0.01,
-        "accuracy": 0.5 + epoch * 0.01
-    }
-    owlab.log(metrics, step=epoch)
-
-# 结束实验
-owlab.finish(results={
-    "final_loss": 0.1,
-    "final_accuracy": 0.95
-})
+    owlab.log({"loss": loss, "accuracy": acc}, step=epoch)
 ```
 
-## 项目结构
+### 3. Finish and save results
 
-```
-owlab/
-├── core/           # 核心模块
-│   ├── config.py   # 配置管理
-│   ├── experiment.py  # 实验管理
-│   └── logger.py   # 日志管理
-├── lark/           # 飞书集成
-│   ├── webhook_bot.py  # Webhook Bot
-│   └── api_bot.py  # API Bot
-├── swanlab/        # SwanLab 集成
-│   └── tracker.py  # 追踪器封装
-├── storage/        # 存储模块
-│   └── local_storage.py  # 本地存储
-└── utils/          # 工具模块
-    └── schema_validator.py  # Schema 验证
+Call `finish(results=...)` with a list of result rows. Each row can include method, dataset, measure, and metric values. These are written to local files and, when configured, to Feishu spreadsheets.
+
+```python
+owlab.finish(results=[
+    {
+        "method": "method1",
+        "dataset1": {"measure": "MCM", "accuracy": 0.95, "loss": 0.05},
+        "dataset2": {"measure": "MCM", "accuracy": 0.92, "loss": 0.08},
+        "Average": {"measure": "MCM", "accuracy": 0.935, "loss": 0.065},
+    },
+    # ...
+])
 ```
 
-## 开发
+### 4. Output layout
 
-### 环境设置
+- **Local:** `./output/<type>/<experiment_name>_<timestamp>/`
+  - `results.csv`, `results.json`, `owlab.log`, `model/`
+- **Lark:** Notifications via webhook; result tables written to Feishu via API (when configured).
+- **SwanLab:** Metrics and runs visible in your SwanLab project (when `api_key` is set).
 
-```bash
-# 创建虚拟环境
-uv venv
+---
 
-# 激活虚拟环境
-source .venv/bin/activate  # Linux/macOS
-# 或
-.venv\Scripts\activate  # Windows
+## 📄 License & Links
 
-# 安装开发依赖
-uv pip install -e ".[dev]"
-```
+- **License:** [MIT](LICENSE)
+- **Repository:** [github.com/Lounwb/OwLab](https://github.com/Lounwb/OwLab)
+- **Issues:** [github.com/Lounwb/OwLab/issues](https://github.com/Lounwb/OwLab/issues)
 
-### 代码规范
+---
 
-项目使用以下工具进行代码质量检查:
+## 🙏 Acknowledgments
 
-- **flake8**: 代码风格检查
-- **isort**: Import 排序
-- **black**: 代码格式化
-- **mypy**: 类型检查
+- [SwanLab](https://swanlab.cn/) — experiment tracking
+- [Lark / Feishu](https://open.feishu.cn/) — notifications and spreadsheets
 
-运行检查:
+## ⭐ Star History
 
-```bash
-# 代码格式化
-black owlab tests
-
-# Import 排序
-isort owlab tests
-
-# 代码检查
-flake8 owlab tests
-
-# 类型检查
-mypy owlab
-```
-
-### 测试
-
-```bash
-# 运行测试
-pytest
-
-# 运行测试并生成覆盖率报告
-pytest --cov=owlab --cov-report=html
-```
-
-## 文档
-
-详细文档请参考:
-
-- [需求分析文档](docs/requirements.md)
-- [设计文档](docs/design.md)
-- [Schema 定义](docs/schema.md)
-
-## 贡献
-
-欢迎贡献！请阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 了解详细信息。
-
-## 许可证
-
-本项目采用 MIT 许可证。详见 [LICENSE](LICENSE) 文件。
-
-## 致谢
-
-- [SwanLab](https://swanlab.cn/) - 实验追踪平台
-- [飞书开放平台](https://open.feishu.cn/) - 企业协作平台
-
-## 联系方式
-
-如有问题或建议，请提交 [Issue](https://github.com/yourusername/owlab/issues)。
+[![Star History Chart](https://api.star-history.com/svg?repos=Lounwb/OwLab&type=date&legend=bottom-right)](https://www.star-history.com/#Lounwb/OwLab&type=date&legend=bottom-right)

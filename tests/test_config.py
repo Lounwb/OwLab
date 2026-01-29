@@ -3,11 +3,11 @@
 import json
 import os
 import tempfile
-from pathlib import Path
 
-import pytest
-
-from owlab.core.config import Config, LarkAPIConfig, LarkConfig, LarkWebhookConfig
+from owlab.core.config import Config
+from owlab.core.config import LarkAPIConfig
+from owlab.core.config import LarkConfig
+from owlab.core.config import LarkWebhookConfig
 
 
 class TestConfig:

@@ -1,8 +1,6 @@
 """Lark API Bot for managing sheets and folders."""
 
-import json
 import time
-from datetime import datetime
 from typing import Any, Dict, List, Optional
 
 import requests
@@ -270,7 +268,7 @@ class LarkAPIBot:
         experiment_name = experiment_config.get("experiment_name", "Experiment")
         description = experiment_config.get("description", "")
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        
+
         # Use experiment_name or description for spreadsheet title
         if experiment_name:
             spreadsheet_title = f"{experiment_name}_{timestamp}"
@@ -279,7 +277,7 @@ class LarkAPIBot:
             spreadsheet_title = f"{desc_short}_{timestamp}"
         else:
             spreadsheet_title = f"experiment_{timestamp}"
-            
+
         spreadsheet_token = self._sheet_manager.create_spreadsheet(
             title=spreadsheet_title, folder_token=folder_token
         )
@@ -397,7 +395,7 @@ class LarkAPIBot:
             lines.append(f"Version: {experiment_config['version']}")
         if experiment_config.get("description"):
             lines.append(f"Description: {experiment_config['description']}")
-        
+
         # Add seed (check both top-level and experiment_params)
         seed = experiment_config.get("seed")
         if seed is None:

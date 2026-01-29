@@ -1,7 +1,5 @@
 """Tests for schema validator."""
 
-import pytest
-
 from owlab.utils.schema_validator import SchemaValidator
 
 

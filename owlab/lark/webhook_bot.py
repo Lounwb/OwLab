@@ -3,7 +3,6 @@
 import base64
 import hashlib
 import hmac
-import json
 import time
 from typing import Dict, List, Optional
 
@@ -45,13 +44,13 @@ class LarkWebhookBot:
         # Build signing key: timestamp + "\n" + secret
         key = f"{timestamp}\n{self.signature}"
         key_enc = key.encode("utf-8")
-        
+
         # Message is empty string for webhook
         msg_enc = "".encode("utf-8")
-        
+
         # Calculate HMAC-SHA256
         hmac_code = hmac.new(key_enc, msg_enc, digestmod=hashlib.sha256).digest()
-        
+
         # Base64 encode
         sign = base64.b64encode(hmac_code).decode("utf-8")
         return sign
@@ -82,7 +81,7 @@ class LarkWebhookBot:
             response = requests.post(self.webhook_url, json=payload, timeout=10)
             response.raise_for_status()
             result = response.json()
-            
+
             # Check response code
             if result.get("code") == 0:
                 logger.info("Message sent successfully")
@@ -148,10 +147,10 @@ class LarkWebhookBot:
         if seed is None:
             params = config.get("experiment_params", {})
             seed = params.get("seed")
-        
+
         # Format experiment parameters
         params_text = self._format_experiment_params(config)
-        
+
         # Build content text
         content_parts = []
         content_parts.append(f"**Experiment:** {experiment_name}")
@@ -164,7 +163,7 @@ class LarkWebhookBot:
             content_parts.append(f"**Seed:** {seed}")
         if params_text != "  (none)":
             content_parts.append(f"**Parameters:**\n{params_text}")
-        
+
         content = {
             "config": {
                 "wide_screen_mode": True,
@@ -211,10 +210,10 @@ class LarkWebhookBot:
         """
         if not results or not isinstance(results, list):
             return "No results"
-        
+
         # Limit results to max_rows
         display_results = results[:max_rows]
-        
+
         # Build table header
         # Extract all unique keys from results (excluding 'method')
         all_keys = set()
@@ -223,31 +222,31 @@ class LarkWebhookBot:
                 for key in result.keys():
                     if key != "method":
                         all_keys.add(key)
-        
+
         # Sort keys: datasets first, then Average
         sorted_keys = sorted([k for k in all_keys if k != "Average"])
         if "Average" in all_keys:
             sorted_keys.append("Average")
-        
+
         if not sorted_keys:
             return "No results"
-        
+
         # Build table rows
         table_rows = []
-        
+
         # Header row
         header = ["Method"] + sorted_keys
         table_rows.append("| " + " | ".join(header) + " |")
         table_rows.append("| " + " | ".join(["---"] * len(header)) + " |")
-        
+
         # Data rows
         for result in display_results:
             if not isinstance(result, dict) or "method" not in result:
                 continue
-            
+
             method = result.get("method", "")
             row = [method]
-            
+
             for key in sorted_keys:
                 value = result.get(key, "")
                 if isinstance(value, dict):
@@ -263,15 +262,15 @@ class LarkWebhookBot:
                     row.append(", ".join(metrics) if metrics else "")
                 else:
                     row.append(str(value))
-            
+
             table_rows.append("| " + " | ".join(row) + " |")
-        
+
         table_text = "\n".join(table_rows)
-        
+
         # Add note if results were truncated
         if len(results) > max_rows:
             table_text += f"\n\n*Showing first {max_rows} of {len(results)} results*"
-        
+
         return table_text
 
     def send_finish_notification(
@@ -301,16 +300,16 @@ class LarkWebhookBot:
             True if successful, False otherwise
         """
         config = config or {}
-        
+
         # Extract seed (check both top-level and experiment_params)
         seed = config.get("seed")
         if seed is None:
             params = config.get("experiment_params", {})
             seed = params.get("seed")
-        
+
         # Format experiment parameters
         params_text = self._format_experiment_params(config)
-        
+
         # Build content text (without results table)
         content_parts = []
         content_parts.append(f"**Experiment:** {experiment_name}")
@@ -323,7 +322,7 @@ class LarkWebhookBot:
             content_parts.append(f"**Seed:** {seed}")
         if params_text != "  (none)":
             content_parts.append(f"**Parameters:**\n{params_text}")
-        
+
         content = {
             "config": {
                 "wide_screen_mode": True,

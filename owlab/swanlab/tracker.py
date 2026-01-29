@@ -72,7 +72,7 @@ class SwanLabTracker:
             self._run = self.swanlab.init(**init_params)
             self._initialized = True
             logger.info(f"SwanLab run initialized: {experiment_name}")
-            
+
             # Try to get URL immediately after initialization
             # Some SwanLab versions may generate URL immediately, others may need time
             try:

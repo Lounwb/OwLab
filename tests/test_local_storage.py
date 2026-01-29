@@ -2,10 +2,8 @@
 
 import csv
 import json
-import tempfile
 from pathlib import Path
-
-import pytest
+import tempfile
 
 from owlab.storage.local_storage import LocalStorage
 

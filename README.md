@@ -14,7 +14,8 @@
 
 <p align="center">
   <a href="https://pypi.org/project/owlab/"><img src="https://img.shields.io/pypi/v/owlab?color=blue" alt="PyPI"/></a>
-  <a href="https://pypi.org/project/owlab/"><img src="https://img.shields.io/pypi/dm/owlab" alt="PyPI - Downloads"/></a>
+  <a href="https://swanlab.cn"><img src="https://raw.githubusercontent.com/SwanHubX/assets/main/badge2.svg" alt="swanlab"/></a>
+  <a href="https://www.feishu.cn/"><img alt="Static Badge" src="https://img.shields.io/badge/notification_by-Lark-blue?link=%23000000"></a>
   <a href="https://github.com/Lounwb/OwLab/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"/></a>
   <a href="https://www.python.org/downloads/"><img src="https://img.shields.io/badge/python-3.9+-green.svg" alt="Python 3.9+"/></a>
 </p>

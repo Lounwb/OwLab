@@ -1,11 +1,12 @@
 """Tests for retry utilities."""
 
-import time
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 import pytest
 
-from owlab.utils.retry import RetryError, retry, retry_on_http_error
+from owlab.utils.retry import retry
+from owlab.utils.retry import retry_on_http_error
+from owlab.utils.retry import RetryError
 
 
 class TestRetry:

@@ -1,7 +1,7 @@
 """Logging utilities for OwLab."""
 
-import sys
 from pathlib import Path
+import sys
 from typing import Optional
 
 from loguru import logger

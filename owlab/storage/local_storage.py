@@ -1,8 +1,8 @@
 """Local storage implementation for OwLab."""
 
 import csv
-import json
 from datetime import datetime
+import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 

@@ -1,6 +1,6 @@
 """Schema validation utilities."""
 
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from owlab.core.logger import get_logger
 

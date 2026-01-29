@@ -6,7 +6,8 @@ import os
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
+from pydantic import Field
 
 logger = logging.getLogger("owlab.core.config")
 
@@ -110,7 +111,7 @@ class Config(BaseModel):
                     loaded_path = path
                     logger.info(f"Loaded config from: {loaded_path}")
                     break
-            
+
             # Log if no config file was found
             if not loaded_path and not config_dict:
                 logger.debug("No config file found in default locations")

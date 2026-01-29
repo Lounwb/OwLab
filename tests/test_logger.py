@@ -1,11 +1,10 @@
 """Tests for logger module."""
 
-import tempfile
 from pathlib import Path
+import tempfile
 
-import pytest
-
-from owlab.core.logger import get_logger, reset_logger_config
+from owlab.core.logger import get_logger
+from owlab.core.logger import reset_logger_config
 
 
 class TestLogger:

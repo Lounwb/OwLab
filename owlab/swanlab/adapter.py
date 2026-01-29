@@ -1,8 +1,7 @@
 """Adapters for converting other experiment tracking formats to SwanLab."""
 
-import os
 from pathlib import Path
-from typing import Any, Dict, Iterator, Optional
+from typing import Any, Dict, Optional
 
 from owlab.core.logger import get_logger
 
@@ -34,7 +33,7 @@ class TensorBoardAdapter:
             step_offset: Offset to add to step numbers
         """
         try:
-            from tensorboard.backend.event_processing.event_accumulator import (
+            from tensorboard.backend.event_processing.event_accumulator import (  # noqa: F401
                 EventAccumulator,
             )
         except ImportError:
@@ -71,9 +70,7 @@ class TensorBoardAdapter:
             step_offset: Offset to add to step numbers
         """
         try:
-            from tensorboard.backend.event_processing.event_accumulator import (
-                EventAccumulator,
-            )
+            from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
         except ImportError:
             return
 
@@ -98,7 +95,6 @@ class TensorBoardAdapter:
                 for event in scalar_events:
                     step = int(event.step) + step_offset
                     value = float(event.value)
-                    wall_time = event.wall_time
 
                     # Log to SwanLab
                     swanlab_tracker.log({tag: value}, step=step)
@@ -114,9 +110,7 @@ class TensorBoardAdapter:
             Dictionary containing summary information
         """
         try:
-            from tensorboard.backend.event_processing.event_accumulator import (
-                EventAccumulator,
-            )
+            from tensorboard.backend.event_processing.event_accumulator import EventAccumulator
         except ImportError:
             logger.error(
                 "TensorBoard not installed. Install with: pip install tensorboard"

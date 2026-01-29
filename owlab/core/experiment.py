@@ -79,12 +79,12 @@ class OwLab:
         if "experiment_name" in self._experiment_config:
             logger.warning("experiment_name in config will be ignored, using top-level experiment_name")
             del self._experiment_config["experiment_name"]
-        
+
         # Merge seed from Config.experiment.seed if present and not already in config
         if self.config.experiment and self.config.experiment.seed is not None:
             if "seed" not in self._experiment_config:
                 self._experiment_config["seed"] = self.config.experiment.seed
-        
+
         self._tags = tags or []
         self._type = type or "default"
 
@@ -107,7 +107,9 @@ class OwLab:
                     experiment_name=experiment_name,
                 )
                 from loguru import logger as _loguru_logger
-                from owlab.core.logger import LOG_FORMAT_PLAIN, get_logger_level
+
+                from owlab.core.logger import get_logger_level
+                from owlab.core.logger import LOG_FORMAT_PLAIN
                 log_path = experiment_dir / "owlab.log"
                 self._log_file_handler_id = _loguru_logger.add(
                     str(log_path),
@@ -236,7 +238,7 @@ class OwLab:
                             # Use root folder if creation fails
                             self._experiment_folder_token = self.config.lark.api.root_folder_token
                             logger.warning("Failed to create experiment folder, using root folder")
-                    
+
                     if self._experiment_folder_token:
                         folder_url = f"https://bytedance.feishu.cn/drive/folder/{self._experiment_folder_token}"
 
@@ -327,7 +329,7 @@ class OwLab:
                     # Fallback to root folder if no folder was created
                     folder_token = self.config.lark.api.root_folder_token
                     logger.warning("No experiment folder token, using root folder")
-                
+
                 if folder_token:
                     # Prepare experiment config for sheet writing
                     sheet_config = {

@@ -63,21 +63,7 @@ packages = ["owlab"]
 line-length = 100
 target-version = ["py39", "py310", "py311", "py312"]
 include = '\\.pyi?$'
-extend-exclude = [
-    "/build/",
-    "/dist/",
-    "/.eggs/",
-    "/.git/",
-    "/.hg/",
-    "/.mypy_cache/",
-    "/.tox/",
-    "/.venv/",
-    "/venv/",
-    "/_build/",
-    "/buck-out/",
-    "/build/",
-    "/dist/",
-]
+extend-exclude = '/(\\.eggs|\\.git|\\.hg|\\.mypy_cache|\\.pytest_cache|\\.tox|\\.venv|_build|buck-out|build|dist|venv)/'
 
 [tool.isort]
 profile = "google"

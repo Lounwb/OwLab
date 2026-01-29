@@ -1,7 +1,5 @@
 """Lark sheet manager for creating and formatting experiment reports."""
 
-import time
-from datetime import datetime
 from typing import List, Optional, Tuple
 
 import requests

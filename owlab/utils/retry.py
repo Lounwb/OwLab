@@ -1,7 +1,7 @@
 """Retry utilities for handling transient failures."""
 
-import time
 from functools import wraps
+import time
 from typing import Any, Callable, Optional, Type, Union
 
 from owlab.core.logger import get_logger

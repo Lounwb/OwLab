@@ -1,7 +1,7 @@
 """Adapters for converting other experiment tracking formats to SwanLab."""
 
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Dict
 
 from owlab.core.logger import get_logger
 

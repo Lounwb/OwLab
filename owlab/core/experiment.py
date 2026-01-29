@@ -28,10 +28,10 @@ class OwLab:
         self._description: Optional[str] = None
         self._experiment_config: Optional[Dict[str, Any]] = None
         self._tags: List[str] = []
-        self._swanlab_tracker = None
-        self._lark_webhook_bot = None
-        self._lark_api_bot = None
-        self._local_storage = None
+        self._swanlab_tracker: Any = None
+        self._lark_webhook_bot: Any = None
+        self._lark_api_bot: Any = None
+        self._local_storage: Any = None
         self._experiment_folder_token: Optional[str] = None  # Cache folder token
         self._swanlab_url: str = ""  # Cache SwanLab URL
         self._version: str = "1.0"  # Experiment version
@@ -236,7 +236,8 @@ class OwLab:
                         )
                         if not self._experiment_folder_token:
                             # Use root folder if creation fails
-                            self._experiment_folder_token = self.config.lark.api.root_folder_token
+                            if self.config.lark and self.config.lark.api:
+                                self._experiment_folder_token = self.config.lark.api.root_folder_token
                             logger.warning("Failed to create experiment folder, using root folder")
 
                     if self._experiment_folder_token:
@@ -327,7 +328,8 @@ class OwLab:
                 folder_token = self._experiment_folder_token
                 if not folder_token:
                     # Fallback to root folder if no folder was created
-                    folder_token = self.config.lark.api.root_folder_token
+                    if self.config.lark and self.config.lark.api:
+                        folder_token = self.config.lark.api.root_folder_token
                     logger.warning("No experiment folder token, using root folder")
 
                 if folder_token:
@@ -337,7 +339,7 @@ class OwLab:
                         "experiment_name": self._experiment_name or "unknown",
                         "description": self._description or "",
                         "version": self._version,
-                        **self._experiment_config,
+                        **(self._experiment_config or {}),
                     }
                     self._lark_api_bot.write_results_to_sheet(
                         folder_token=folder_token,
@@ -359,7 +361,7 @@ class OwLab:
                     "experiment_name": self._experiment_name or "unknown",
                     "description": self._description or "",
                     "version": self._version,
-                    **self._experiment_config,
+                    **(self._experiment_config or {}),
                 }
                 self._lark_webhook_bot.send_finish_notification(
                     experiment_name=self._experiment_name or "unknown",

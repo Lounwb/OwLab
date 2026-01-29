@@ -4,7 +4,7 @@ import base64
 import hashlib
 import hmac
 import time
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 import requests
 
@@ -164,7 +164,7 @@ class LarkWebhookBot:
         if params_text != "  (none)":
             content_parts.append(f"**Parameters:**\n{params_text}")
 
-        content = {
+        content: Dict[str, Any] = {
             "config": {
                 "wide_screen_mode": True,
             },
@@ -196,7 +196,7 @@ class LarkWebhookBot:
                 }
             )
 
-        return self._send_message(content)
+        return self._send_message(content)  # type: ignore[no-any-return]
 
     def _format_results_table(self, results: list, max_rows: int = 10) -> str:
         """Format experiment results as markdown table.
@@ -323,7 +323,7 @@ class LarkWebhookBot:
         if params_text != "  (none)":
             content_parts.append(f"**Parameters:**\n{params_text}")
 
-        content = {
+        content: Dict[str, Any] = {
             "config": {
                 "wide_screen_mode": True,
             },
@@ -355,4 +355,4 @@ class LarkWebhookBot:
                 }
             )
 
-        return self._send_message(content)
+        return self._send_message(content)  # type: ignore[no-any-return]

@@ -1,5 +1,6 @@
 """Lark API Bot for managing sheets and folders."""
 
+from datetime import datetime
 import time
 from typing import Any, Dict, List, Optional
 
@@ -85,7 +86,7 @@ class LarkAPIBot:
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json; charset=utf-8",
         }
-        params = {
+        params: Dict[str, Any] = {
             "folder_token": folder_token,
             "page_size": 200,  # Maximum page size
         }
@@ -158,7 +159,7 @@ class LarkAPIBot:
                 # Cache the folder token
                 self._type_folders[experiment_type] = folder_token
                 logger.info(f"Created type folder '{experiment_type}' (token: {folder_token})")
-                return folder_token
+                return folder_token  # type: ignore[no-any-return]
             else:
                 error_msg = data.get("msg", "Unknown error")
                 error_code = data.get("code", 0)
@@ -225,7 +226,7 @@ class LarkAPIBot:
             if data.get("code") == 0:
                 folder_token = data.get("data", {}).get("token")
                 logger.info(f"Created folder: {folder_name} (token: {folder_token})")
-                return folder_token
+                return folder_token  # type: ignore[no-any-return]
             else:
                 error_msg = data.get("msg", "Unknown error")
                 logger.error(f"Error creating folder: {error_msg}")
@@ -318,6 +319,7 @@ class LarkAPIBot:
                 measure_name,
             )
 
+            current_sheet_id: Optional[str]
             if measure_idx == 0:
                 # Rename first sheet to measure name
                 current_sheet_id = sheet_id

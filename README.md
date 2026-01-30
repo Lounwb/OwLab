@@ -130,7 +130,21 @@ owlab.finish(results=[
 ])
 ```
 
-#### 4. Output layout
+#### 4. Sync PyTorch TensorBoard to SwanLab
+
+Like SwanLab’s `swanlab.sync_tensorboard_torch()`: call **after** `init()` and **before** creating `SummaryWriter`. Then `writer.add_scalar()` / `add_scalars()` also log to the current SwanLab run.
+
+```python
+owlab.init(project="my_project", experiment_name="exp_1", ...)
+owlab.sync_tensorboard_torch()
+
+from torch.utils.tensorboard import SummaryWriter
+writer = SummaryWriter(log_dir="./runs")
+writer.add_scalar("loss", loss, step)   # also sent to SwanLab
+writer.add_scalar("acc", acc, step)
+```
+
+#### 5. Output layout
 
 - **Local:** `./output/<type>/<experiment_name>_<timestamp>/`
   - `results.csv`, `results.json`, `owlab.log`, `model/`

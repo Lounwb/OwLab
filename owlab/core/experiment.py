@@ -258,6 +258,26 @@ class OwLab:
         self._initialized = True
         logger.info(f"Experiment '{experiment_name}' initialized successfully")
 
+    def sync_tensorboard_torch(self) -> None:
+        """Sync PyTorch TensorBoard to SwanLab (like swanlab.sync_tensorboard_torch()).
+
+        Call after init() and before creating torch.utils.tensorboard.SummaryWriter.
+        Then writer.add_scalar() / add_scalars() will also log to the current SwanLab run.
+        """
+        if not self._initialized:
+            raise RuntimeError("Experiment not initialized. Call init() first.")
+        if not self._swanlab_tracker:
+            logger.warning(
+                "SwanLab not configured; sync_tensorboard_torch() has no effect."
+            )
+            return
+        try:
+            from owlab.swanlab.tensorboard_sync import patch_torch_tensorboard
+
+            patch_torch_tensorboard(self._swanlab_tracker)
+        except Exception as e:
+            logger.warning(f"Failed to sync TensorBoard to SwanLab: {e}")
+
     def log(self, metrics: Dict[str, Any], step: Optional[int] = None) -> None:
         """Log metrics to SwanLab and local storage.
 

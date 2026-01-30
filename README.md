@@ -24,88 +24,66 @@
 
 ## ✨ Features
 
-| | |
-|---|--------|
-| 📈 | **Experiment tracking** — Metrics and runs with [SwanLab](https://swanlab.cn/) |
-| 📊 | **Experiment data management** — Results in Feishu spreadsheets |
-| 📢 | **Message notifications** — Start/end alerts via Lark webhook |
-| 💾 | **Multi-backend backup** — Local output + Lark; logs, results, and models saved |
+📈 **Metrics and Tracking**: Embed minimal code into your ML pipeline to track and record key training metrics based on [SwanLab](https://swanlab.cn/).\
+📊 **Data Management**: Automatically organize your experiment directory structure based on experiment type and tags, enabling better management of experimental data.\
+📢 **Message Notifications**: Automatic push notifications are sent when the experiment starts, ends, or is interrupted, keeping you informed of the latest progress.\
+💾 **Backup**: Back up your data in the cloud and locally to prevent data loss.
 
 ---
 
 ## 🚀 Quick Start
 
-Install from [PyPI](https://pypi.org/project/owlab/):
-
+### 📦 Installation
 ```bash
 pip install owlab
 # or: uv pip install owlab
+# or: use source code
+# git clone https://github.com/Lounwb/OwLab.git && cd OwLab && pip install -e .
+
 ```
 
-```python
-from owlab import OwLab
+### ⚙️ Configuration
 
-owlab = OwLab()
-owlab.init(project="my_project", experiment_name="run_1", config={"lr": 0.01, "epochs": 10})
+To enable **Lark** and **Swanlab**, you need to configure the relevant tokens and secrets.
+Owlab supports both configuration files and environment variables, providing you with flexible options：
 
-for step in range(10):
-    owlab.log({"loss": 1.0 - step * 0.1, "acc": step * 0.1}, step=step)
-
-owlab.finish(results=[{"method": "baseline", "dataset1": {"measure": "MCM", "accuracy": 0.95}}])
+- **Configuration file:** `~/.owlab/config.json` or `./.owlab/config.json`, here is an example:
+```json
+// configure your lark and swanlab in .owlab/config.json
+{
+    "lark": {
+      "webhook": {
+        "webhook_url": "<your webhook url>",
+        "signature": "<your webhook signature>"
+      },
+      "api": {
+        "app_id": "<your app id>",
+        "app_secret": "<your app secret>",
+        "root_folder_token": "<your root folder token>"
+      }
+    },
+    "swanlab": {
+      "api_key": "<your swanlab api key>"
+    },
+    "storage": {
+      "local_path": "./output",
+      "csv_path": "./output/csv",
+      "model_path": "./output/models"
+    },
+    "logging": {
+      "level": "INFO",
+      "format": null,
+      "file": "./logs/owlab.log"
+    }
+  }
+  
 ```
-
-Without any config, OwLab runs in local-only mode: results go to `./output/` and no Lark/SwanLab calls are made.
-
----
-
-## 📦 Installation
-
-| Method | Command |
-|--------|--------|
-| **PyPI (recommended)** | `pip install owlab` — [Download on PyPI](https://pypi.org/project/owlab/) |
-| **uv** | `uv pip install owlab` |
-| **From source** | `git clone https://github.com/Lounwb/OwLab.git && cd OwLab && pip install -e .` |
-
----
-
-## ⚙️ Configuration
-
-To enable **Lark (Feishu)** and **SwanLab**, put your credentials in one of:
-
-- **File:** `~/.owlab/config.json` or `./.owlab/config.json`
 - **Environment:** `OWLAB_LARK__WEBHOOK__WEBHOOK_URL`, `OWLAB_LARK__API__APP_ID`, etc.
 
-Example config file (use `.owlab/config.json.example` as a template):
 
-```json
-{
-  "lark": {
-    "webhook": {
-      "webhook_url": "https://open.feishu.cn/open-apis/bot/v2/hook/...",
-      "signature": "your_signature"
-    },
-    "api": {
-      "app_id": "your_app_id",
-      "app_secret": "your_app_secret",
-      "root_folder_token": "your_root_folder_token"
-    }
-  },
-  "swanlab": {
-    "api_key": "your_swanlab_api_key"
-  },
-  "storage": {
-    "local_path": "./output"
-  }
-}
-```
+### 📖 Usage
 
-Environment variables follow the pattern `OWLAB_<SECTION>__<KEY>__<SUBKEY>` (e.g. `OWLAB_LARK__WEBHOOK__WEBHOOK_URL`).
-
----
-
-## 📖 Usage
-
-### 1. Initialize
+#### 1. Initialize
 
 ```python
 from owlab import OwLab
@@ -129,14 +107,14 @@ owlab.init(
 )
 ```
 
-### 2. Log metrics during training
+#### 2. Log metrics during training
 
 ```python
 for epoch in range(100):
     owlab.log({"loss": loss, "accuracy": acc}, step=epoch)
 ```
 
-### 3. Finish and save results
+#### 3. Finish and save results
 
 Call `finish(results=...)` with a list of result rows. Each row can include method, dataset, measure, and metric values. These are written to local files and, when configured, to Feishu spreadsheets.
 
@@ -152,7 +130,7 @@ owlab.finish(results=[
 ])
 ```
 
-### 4. Output layout
+#### 4. Output layout
 
 - **Local:** `./output/<type>/<experiment_name>_<timestamp>/`
   - `results.csv`, `results.json`, `owlab.log`, `model/`
@@ -160,6 +138,7 @@ owlab.finish(results=[
 - **SwanLab:** Metrics and runs visible in your SwanLab project (when `api_key` is set).
 
 ---
+
 
 ## 📄 License & Links
 
@@ -177,4 +156,4 @@ owlab.finish(results=[
 
 ## ⭐ Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=Lounwb/OwLab&type=date&legend=bottom-right)](https://www.star-history.com/#Lounwb/OwLab&type=date&legend=bottom-right)
+[![Star History Chart](https://api.star-history.com/svg?repos=Lounwb/OwLab&type=date&legend=top-left)](https://www.star-history.com/#Lounwb/OwLab&type=date&legend=top-left)
